@@ -19,6 +19,6 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "DenuBoilerplate"
+rootProject.name = "AI Prompter"
 include(":app")
  

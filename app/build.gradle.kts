@@ -8,11 +8,11 @@ plugins {
 }
 
 android {
-    namespace = "com.gmail.denuelle42.denuboilerplate"
+    namespace = "com.gmail.denuelle42.aiprompter"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.gmail.denuelle42.denuboilerplate"
+        applicationId = "com.gmail.denuelle42.aiprompter"
         minSdk = 24
         targetSdk = 34
         versionCode = 1
