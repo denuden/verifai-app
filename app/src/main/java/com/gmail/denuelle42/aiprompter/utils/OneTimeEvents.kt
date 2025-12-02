@@ -1,5 +1,6 @@
 package com.gmail.denuelle42.aiprompter.utils
 
+import com.gmail.denuelle42.aiprompter.data.remote.error.ErrorData
 import com.gmail.denuelle42.aiprompter.navigation.NavigationScreens
 
 /**
@@ -10,4 +11,5 @@ sealed class OneTimeEvents {
     object OnPopBackStack : OneTimeEvents()
     data class ShowSnackbar(val snackbarEvent: SnackbarEvent)  : OneTimeEvents()
     data class ShowToast(val message : String)  : OneTimeEvents()
+    data class ShowInputError(val errors : ErrorData)  : OneTimeEvents()
 }

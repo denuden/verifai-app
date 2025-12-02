@@ -19,6 +19,6 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "AI Prompter"
+rootProject.name = "Verifai"
 include(":app")
  

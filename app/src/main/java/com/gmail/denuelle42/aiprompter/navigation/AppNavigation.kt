@@ -1,22 +1,24 @@
 package com.gmail.denuelle42.aiprompter.navigation
 
+import android.content.Context
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 
 @Composable
 fun AppNavigation(navController: NavHostController) {
-   NavHost(navController = navController, startDestination = RootGraphs.SampleGraph){
-      addSampleNavGraph(navController)
+   NavHost(navController = navController, startDestination = RootGraphs.AuthGraph){
+//      addSampleNavGraph(navController)
+      addAuthNavGraph(navController)
    }
 }
 
 
 /**
  * Gets proper top app bar title
- * based on current nvigation
+ * based on current navigation
  */
-fun getTopBarTitle(currentRoute : String) : String{
+fun getTopBarTitle(currentRoute : String, context : Context) : String{
    //Get route name as package  and get the last one the get the class name
    val route = currentRoute.substringAfterLast(".")
 
