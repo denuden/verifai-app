@@ -1,6 +1,6 @@
 package com.gmail.denuelle42.aiprompter.di.modules
 
-import com.gmail.denuelle42.aiprompter.data.repositories.sample.SampleAPI
+import com.gmail.denuelle42.aiprompter.data.repositories.auth.AuthAPI
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -13,7 +13,7 @@ import javax.inject.Singleton
 object APIModule {
     @Provides
     @Singleton
-    fun provideSampleAPI(retrofit: Retrofit): SampleAPI {
-        return retrofit.create(SampleAPI::class.java)
+    fun provideAuthAPI(retrofit: Retrofit): AuthAPI {
+        return retrofit.create(AuthAPI::class.java)
     }
 }

@@ -9,12 +9,12 @@ plugins {
 
 android {
     namespace = "com.gmail.denuelle42.aiprompter"
-    compileSdk = 34
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "com.gmail.denuelle42.aiprompter"
-        minSdk = 24
-        targetSdk = 34
+        minSdk = 26
+        targetSdk = 36
         versionCode = 1
         versionName = "1.0"
 
@@ -126,6 +126,7 @@ dependencies {
 //    Encryption
     implementation(libs.bcrypt)
     implementation(libs.androidx.security)
+    implementation(libs.datastore)
 
 //    Retrofit
     implementation(libs.retrofit2)
