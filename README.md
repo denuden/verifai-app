@@ -1,2 +1,2 @@
-# AIPrompterCompose
-Boilerplate or starting code with package structure and some required dependencies
+# Verifai App
+AI Prompter for fact checking
