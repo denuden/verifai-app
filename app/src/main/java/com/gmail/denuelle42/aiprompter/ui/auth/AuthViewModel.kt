@@ -99,6 +99,7 @@ class AuthViewModel @Inject constructor(
     }
 
     private fun onError(e: Throwable?) {
+        Log.e("gewg", e.toString())
         when (e) {
             is HttpException -> {
                 val errorBody = e.response()?.errorBody()
