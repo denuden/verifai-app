@@ -6,6 +6,8 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.LockOpen
 import androidx.compose.material.icons.outlined.PersonOutline
@@ -24,8 +26,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.example.compose.VerifaiTheme
 import com.gmail.denuelle42.aiprompter.R
 import com.gmail.denuelle42.aiprompter.ui.auth.AuthScreenEvents
@@ -44,6 +49,7 @@ fun LoginScreenContent(
             containerColor = Color.White
         ),
         shape = MaterialTheme.shapes.large,
+        modifier = modifier
     ) {
         Column(
             verticalArrangement = Arrangement.Center,
@@ -53,10 +59,11 @@ fun LoginScreenContent(
         ) {
             Text(
                 text = stringResource(R.string.lbl_sign_in).uppercase(),
-                style = MaterialTheme.typography.titleLarge,
+                style = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.Bold,
             )
 
+            // EMAIL
             TextField(
                 value = uiState.email.orEmpty(),
                 onValueChange = {
@@ -65,6 +72,12 @@ fun LoginScreenContent(
                 label = {
                     Text(text = stringResource(R.string.lbl_email))
                 },
+                isError = !uiState.emailError.isNullOrEmpty(),
+                supportingText = {
+                    uiState.emailError?.let { Text(text = it, color = MaterialTheme.colorScheme.error) }
+                },
+                singleLine = true,
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
                 leadingIcon = {
                     Icon(
                         imageVector = Icons.Outlined.PersonOutline,
@@ -76,9 +89,10 @@ fun LoginScreenContent(
                     unfocusedContainerColor = Color.Transparent,
                     disabledContainerColor = Color.Transparent,
                 ),
-                modifier = Modifier.padding(top = 40.dp)
+                modifier = Modifier.padding(top = 24.dp)
             )
 
+            //PASSWORD
             TextField(
                 value = uiState.password.orEmpty(),
                 onValueChange = {
@@ -87,6 +101,22 @@ fun LoginScreenContent(
                 label = {
                     Text(text = stringResource(R.string.lbl_password))
                 },
+                isError = !uiState.passwordError.isNullOrEmpty(),
+                singleLine = true,
+                supportingText = {
+                    uiState.passwordError?.let { Text(text = it, color = MaterialTheme.colorScheme.error) }
+                },
+                visualTransformation = PasswordVisualTransformation(),
+                keyboardActions = KeyboardActions(
+                    onDone = {
+                        onEvent(
+                            AuthScreenEvents.OnLogin(
+                                email = uiState.email.orEmpty(),
+                                password = uiState.password.orEmpty()
+                            )
+                        )
+                    }
+                ),
                 leadingIcon = {
                     Icon(
                         imageVector = Icons.Outlined.LockOpen,
@@ -103,11 +133,13 @@ fun LoginScreenContent(
 
             Row(modifier = Modifier.padding(top = 16.dp)) {
                 Text(
-                    text = stringResource(R.string.lbl_don_t_have_an_account)
+                    text = stringResource(R.string.lbl_don_t_have_an_account),
+                    fontSize = 14.sp,
                 )
                 Text(
                     text = stringResource(R.string.lbl_register_here),
                     color = MaterialTheme.colorScheme.primary,
+                    fontSize = 14.sp,
                     modifier = Modifier
                         .padding(start = 8.dp)
                         .clickableDelayed {
@@ -120,8 +152,8 @@ fun LoginScreenContent(
                 onClick = {
                     onEvent(
                         AuthScreenEvents.OnLogin(
-                            uiState.email.orEmpty(),
-                            uiState.password.orEmpty()
+                            email = uiState.email.orEmpty(),
+                            password = uiState.password.orEmpty()
                         )
                     )
                 },
@@ -131,15 +163,12 @@ fun LoginScreenContent(
             ) {
                 Text(
                     text = stringResource(R.string.btn_login),
-                    style = MaterialTheme.typography.titleMedium,
+                    style = MaterialTheme.typography.titleSmall,
                     modifier = Modifier.padding(8.dp)
                 )
             }
         }
-
     }
-
-
 }
 
 @Preview

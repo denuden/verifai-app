@@ -8,7 +8,7 @@ import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
-import retrofit2.converter.moshi.MoshiConverterFactory
+import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Singleton
 
 //https://medium.com/@psarakisnick/clean-networking-with-retrofit-and-interceptor-in-kotlin-63a9ac85def2
@@ -34,11 +34,41 @@ object RetrofitModule {
     @Provides
     @Singleton
     fun provideOkHttpClient(
-        loggingInterceptor: HttpLoggingInterceptor
+        loggingInterceptor: HttpLoggingInterceptor,
+        tokenProvider: TokenProvider
     ): OkHttpClient {
-        return OkHttpClient.Builder().apply {
-            addInterceptor(loggingInterceptor)
-        }.build()
+
+        return OkHttpClient.Builder()
+            .addInterceptor(loggingInterceptor)
+            .addInterceptor { chain ->
+
+                // Get the latest token instantly from RAM
+                val token = tokenProvider.getToken()
+
+                val original = chain.request()
+
+                /**
+                 * If token exists, we attach the Authorization header.
+                 *
+                 * IMPORTANT:
+                 * - This is a simple read (atomic)
+                 * - No DataStore or disk access inside OkHttp thread
+                 */
+
+                val requestBuilder = original.newBuilder()
+                    // 1. CRITICAL FIX FOR LARAVEL:
+                    .header("Accept", "application/json")
+                    .header("Content-Type", "application/json") // Good practice to ensure this is set too
+
+                // 2. Add Token if exists
+                if (!token.isNullOrEmpty()) {
+                    requestBuilder.header("Authorization", "Bearer $token")
+                }
+
+                // Continue the request
+                chain.proceed(requestBuilder.build())
+            }
+            .build()
     }
 
 
@@ -52,7 +82,7 @@ object RetrofitModule {
     @Singleton
     fun provideRetrofit(client: OkHttpClient): Retrofit {
         return Retrofit.Builder().baseUrl(BASE_URL)
-            .addConverterFactory(MoshiConverterFactory.create())
+            .addConverterFactory(GsonConverterFactory.create())
             .client(client).build()
     }
 }

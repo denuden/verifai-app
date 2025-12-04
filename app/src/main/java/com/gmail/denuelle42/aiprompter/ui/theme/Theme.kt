@@ -256,7 +256,7 @@ val unspecified_scheme = ColorFamily(
 fun VerifaiTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
     // Dynamic color is available on Android 12+
-    dynamicColor: Boolean = true,
+    dynamicColor: Boolean = false,
     content: @Composable() () -> Unit
 ) {
   val colorScheme = when {
@@ -265,7 +265,7 @@ fun VerifaiTheme(
           if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
       }
       
-      darkTheme -> darkScheme
+      darkTheme -> lightScheme
       else -> lightScheme
   }
 

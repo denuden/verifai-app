@@ -1,11 +1,13 @@
 <resources>
     <string name="app_name">Verifai</string>
+    <string name="error_error">Error</string>
 
 <!--===============LOGIN ================-->
 <!--    Label-->
     <string name="lbl_sign_in">Sign In</string>
     <string name="lbl_email">Email</string>
     <string name="lbl_password">Password</string>
+    <string name="lbl_password_confirmation">Password Confirmation</string>
     <string name="lbl_register_here">Register here</string>
     <string name="lbl_don_t_have_an_account">Don\'t have an account?</string>
 

@@ -90,8 +90,9 @@ fun MainScreen(modifier: Modifier = Modifier) {
     }
 
     Scaffold {
-        Box(modifier = Modifier.fillMaxSize().padding(it))
-        AppNavigation(navController)
+        Box(modifier = Modifier.fillMaxSize().padding(it)){
+            AppNavigation(navController)
+        }
     }
 }
 

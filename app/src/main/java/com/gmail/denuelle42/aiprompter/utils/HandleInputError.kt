@@ -6,6 +6,10 @@ import com.gmail.denuelle42.aiprompter.data.remote.error.ErrorData
 fun handleInputError(errorData: ErrorData): String {
     val result = StringBuilder()
 
+    errorData.password?.let { result.append("Password: ${it.joinToString(", ")}\n") }
+    errorData.name?.let { result.append("Name: ${it.joinToString(", ")}\n") }
+    errorData.email?.let { result.append("Email: ${it.joinToString(", ")}\n") }
+
     errorData.q?.let { result.append("Query: ${it.joinToString(", ")}\n") }
     errorData.type?.let { result.append("Type: ${it.joinToString(", ")}\n") }
     errorData.score?.let { result.append("Score: ${it.joinToString(", ")}\n") }

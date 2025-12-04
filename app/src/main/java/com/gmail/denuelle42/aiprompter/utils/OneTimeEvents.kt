@@ -12,4 +12,5 @@ sealed class OneTimeEvents {
     data class ShowSnackbar(val snackbarEvent: SnackbarEvent)  : OneTimeEvents()
     data class ShowToast(val message : String)  : OneTimeEvents()
     data class ShowInputError(val errors : ErrorData)  : OneTimeEvents()
+    data class ShowError(val msg : String)  : OneTimeEvents()
 }

@@ -6,6 +6,8 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.LockOpen
 import androidx.compose.material.icons.outlined.PersonOutline
@@ -25,8 +27,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.example.compose.VerifaiTheme
 import com.gmail.denuelle42.aiprompter.R
 import com.gmail.denuelle42.aiprompter.ui.auth.AuthScreenEvents
@@ -45,6 +50,7 @@ fun RegisterScreenContent(
             containerColor = Color.White
         ),
         shape = MaterialTheme.shapes.large,
+        modifier = modifier
     ) {
         Column(
             verticalArrangement = Arrangement.Center,
@@ -54,18 +60,24 @@ fun RegisterScreenContent(
         ) {
             Text(
                 text = stringResource(R.string.lbl_register).uppercase(),
-                style = MaterialTheme.typography.titleLarge,
+                style = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.Bold,
             )
 
+            //NAME
             TextField(
                 value = uiState.name.orEmpty(),
                 onValueChange = {
                     onEvent(AuthScreenEvents.OnNameChange(it))
                 },
+                isError = !uiState.nameError.isNullOrEmpty(),
+                supportingText = {
+                    uiState.nameError?.let { Text(text = it, color = MaterialTheme.colorScheme.error) }
+                },
                 label = {
                     Text(text = stringResource(R.string.lbl_name))
                 },
+                singleLine = true,
                 leadingIcon = {
                     Icon(
                         imageVector = Icons.Outlined.PersonOutline,
@@ -77,10 +89,11 @@ fun RegisterScreenContent(
                     unfocusedContainerColor = Color.Transparent,
                     disabledContainerColor = Color.Transparent,
                 ),
-                modifier = Modifier.padding(top = 40.dp)
+                modifier = Modifier.padding(top = 24.dp)
             )
 
 
+            // EMAIL
             TextField(
                 value = uiState.email.orEmpty(),
                 onValueChange = {
@@ -89,6 +102,12 @@ fun RegisterScreenContent(
                 label = {
                     Text(text = stringResource(R.string.lbl_email))
                 },
+                isError = !uiState.emailError.isNullOrEmpty(),
+                supportingText = {
+                    uiState.emailError?.let { Text(text = it, color = MaterialTheme.colorScheme.error) }
+                },
+                singleLine = true,
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
                 leadingIcon = {
                     Icon(
                         imageVector = Icons.Outlined.PersonOutline,
@@ -103,6 +122,7 @@ fun RegisterScreenContent(
                 modifier = Modifier.padding(top = 8.dp)
             )
 
+            //PASSWORD
             TextField(
                 value = uiState.password.orEmpty(),
                 onValueChange = {
@@ -111,6 +131,12 @@ fun RegisterScreenContent(
                 label = {
                     Text(text = stringResource(R.string.lbl_password))
                 },
+                isError = !uiState.passwordError.isNullOrEmpty(),
+                supportingText = {
+                    uiState.passwordError?.let { Text(text = it, color = MaterialTheme.colorScheme.error) }
+                },
+                singleLine = true,
+                visualTransformation = PasswordVisualTransformation(),
                 leadingIcon = {
                     Icon(
                         imageVector = Icons.Outlined.LockOpen,
@@ -125,13 +151,45 @@ fun RegisterScreenContent(
                 modifier = Modifier.padding(top = 8.dp)
             )
 
-            Row(modifier = Modifier.padding(top = 16.dp)) {
+            //PASSWORD CONFIRMATION
+            TextField(
+                value = uiState.passwordConfirmation.orEmpty(),
+                onValueChange = {
+                    onEvent(AuthScreenEvents.OnPasswordConfirmationChange(it))
+                },
+                label = {
+                    Text(text = stringResource(R.string.lbl_password_confirmation))
+                },
+                isError = !uiState.passwordConfirmationError.isNullOrEmpty(),
+                supportingText = {
+                    uiState.passwordConfirmationError?.let { Text(text = it, color = MaterialTheme.colorScheme.error) }
+                },
+                visualTransformation = PasswordVisualTransformation(),
+                singleLine = true,
+                leadingIcon = {
+                    Icon(
+                        imageVector = Icons.Outlined.LockOpen,
+                        contentDescription = stringResource(R.string.lbl_password_confirmation)
+                    )
+                },
+                colors = TextFieldDefaults.colors().copy(
+                    focusedContainerColor = Color.Transparent,
+                    unfocusedContainerColor = Color.Transparent,
+                    disabledContainerColor = Color.Transparent,
+                ),
+                modifier = Modifier.padding(top = 8.dp)
+            )
+
+
+            Row(modifier = Modifier.padding(top = 8.dp)) {
                 Text(
                     text = stringResource(R.string.lbl_already_have_an_account),
+                    fontSize = 14.sp
                 )
                 Text(
                     text = stringResource(R.string.lbl_sign_in),
                     color = MaterialTheme.colorScheme.primary,
+                    fontSize = 14.sp,
                     modifier = Modifier
                         .padding(start = 8.dp)
                         .clickableDelayed {
@@ -144,9 +202,10 @@ fun RegisterScreenContent(
                 onClick = {
                     onEvent(
                         AuthScreenEvents.OnRegister(
-                            uiState.name.orEmpty(),
-                            uiState.email.orEmpty(),
-                            uiState.password.orEmpty()
+                            name = uiState.name.orEmpty(),
+                            email = uiState.email.orEmpty(),
+                            password = uiState.password.orEmpty(),
+                            password_confirmation = uiState.passwordConfirmation.orEmpty(),
                         )
                     )
                 },
@@ -156,7 +215,7 @@ fun RegisterScreenContent(
             ) {
                 Text(
                     text = stringResource(R.string.lbl_register),
-                    style = MaterialTheme.typography.titleMedium,
+                    style = MaterialTheme.typography.titleSmall,
                     modifier = Modifier.padding(8.dp)
                 )
             }

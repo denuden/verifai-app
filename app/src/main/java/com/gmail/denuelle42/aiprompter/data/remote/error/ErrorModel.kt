@@ -6,6 +6,7 @@ import androidx.annotation.Keep
 data class ErrorModel(
     val status : Int? = null,
     val type : String? = null,
+    val errors : ErrorData? = null,
     val messages : ErrorData? = null,
     val message : String? = null,
     val error : String? = null
@@ -26,4 +27,9 @@ data class ErrorData(
     var sort : List<String>? = null,
     var start_date : List<String>? = null,
     var end_date : List<String>? = null,
+
+    var email : List<String>? = null,
+    var name : List<String>? = null,
+    var password : List<String>? = null,
+    var password_confirmation : List<String>? = null,
 )

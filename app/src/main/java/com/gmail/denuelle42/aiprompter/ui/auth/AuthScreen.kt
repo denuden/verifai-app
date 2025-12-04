@@ -13,8 +13,11 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -39,9 +42,12 @@ import com.gmail.denuelle42.aiprompter.R
 import com.gmail.denuelle42.aiprompter.navigation.NavigationScreens
 import com.gmail.denuelle42.aiprompter.ui.auth.login.LoginScreenContent
 import com.gmail.denuelle42.aiprompter.ui.auth.register.RegisterScreenContent
+import com.gmail.denuelle42.aiprompter.ui.common.dialog.ErrorDialog
+import com.gmail.denuelle42.aiprompter.ui.common.dialog.LoadingDialog
 import com.gmail.denuelle42.aiprompter.utils.ObserveAsEvents
 import com.gmail.denuelle42.aiprompter.utils.OneTimeEvents
 import com.gmail.denuelle42.aiprompter.utils.SnackBarController
+import com.gmail.denuelle42.aiprompter.utils.handleInputError
 import kotlinx.coroutines.launch
 
 @Composable
@@ -49,38 +55,60 @@ fun AuthScreen(
     onPopBackStack: () -> Unit,
     onNavigate: (NavigationScreens) -> Unit,
     viewModel: AuthViewModel = hiltViewModel(),
-    ) {
+) {
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
 
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
+
+    var showErrorDialog by remember { mutableStateOf(false) }
+    var errorMessage by remember { mutableStateOf("") }
+
+    ErrorDialog(
+        text = errorMessage,
+        showDialog = showErrorDialog
+    ) {
+        showErrorDialog = false
+    }
 
     //One time events listener
     ObserveAsEvents(flow = viewModel.channel) { event ->
         when (event) {
             is OneTimeEvents.OnNavigate -> onNavigate(event.route)
             OneTimeEvents.OnPopBackStack -> onPopBackStack()
-            is OneTimeEvents.ShowSnackbar ->  {
+            is OneTimeEvents.ShowSnackbar -> {
                 scope.launch {
                     SnackBarController.sendEvent(event.snackbarEvent)
                 }
             }
+
             is OneTimeEvents.ShowToast -> {
                 Toast.makeText(context, event.message, Toast.LENGTH_SHORT).show()
             }
+
+            is OneTimeEvents.ShowError -> {
+                showErrorDialog = true
+                errorMessage = event.msg
+            }
+
             is OneTimeEvents.ShowInputError -> {
 
             }
         }
     }
 
+    //login loading
+    LoadingDialog(text = "Signing in...", showDialog = state.isLoginLoading) { }
+    //register loading
+    LoadingDialog(text = "Registering...", showDialog = state.isRegisterLoading) { }
+
     AuthScreenContent(uiState = state, onEvent = viewModel::onEvent)
 }
 
 @Composable
 fun AuthScreenContent(
-    uiState : AuthScreenState,
-    onEvent : (AuthScreenEvents) -> Unit
+    uiState: AuthScreenState,
+    onEvent: (AuthScreenEvents) -> Unit
 ) {
     var isLogin by remember { mutableStateOf(true) }
 
@@ -116,12 +144,14 @@ fun AuthScreenContent(
     // Card fade + slide
     val cardAlpha by transition.animateFloat(label = "cardAlpha") { if (it) 1f else 1f }
 
+    val scroll = rememberScrollState()
 
     Box(modifier = Modifier.fillMaxSize()) {
 
         // ANIMATED BACKGROUND
-        Column(modifier = Modifier
-            .fillMaxSize()
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
         ) {
             Box(
                 modifier = Modifier
@@ -138,7 +168,11 @@ fun AuthScreenContent(
         }
 
         // MAIN CONTENT
-        Column(modifier = Modifier.align(Alignment.Center)) {
+        Column(modifier = Modifier
+            .align(Alignment.Center)
+            .imePadding()
+            .verticalScroll(scroll)
+        ) {
 
             // LOGO
             Text(
@@ -149,7 +183,7 @@ fun AuthScreenContent(
                 color = MaterialTheme.colorScheme.onPrimaryContainer,
                 modifier = Modifier
                     .align(Alignment.CenterHorizontally)
-                    .padding(bottom = 16.dp)
+                    .padding(bottom = 8.dp)
             )
 
             // FADING CARD
@@ -168,7 +202,8 @@ fun AuthScreenContent(
                             onEvent = onEvent,
                             animeToRegister = {
                                 isLogin = false
-                            }
+                            },
+                            modifier = Modifier.padding(horizontal = 16.dp)
                         )
                     } else {
                         RegisterScreenContent(
@@ -176,7 +211,8 @@ fun AuthScreenContent(
                             onEvent = onEvent,
                             animeToLogin = {
                                 isLogin = true
-                            }
+                            },
+                            modifier = Modifier.padding(horizontal = 16.dp)
                         )
                     }
                 }
