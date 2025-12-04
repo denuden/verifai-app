@@ -62,3 +62,8 @@
 }
 
 -keep class com.gmail.denuelle42.aiprompter.data.remote.models.* { *; }
+
+-keep class com.gmail.denuelle42.aiprompter.data.remote.error.* { *; }
+
+-keep class com.gmail.denuelle42.aiprompter.data.repositories.auth.request.* { *; }
+-keep class com.gmail.denuelle42.aiprompter.data.repositories.auth.response.* { *; }

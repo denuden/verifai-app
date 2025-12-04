@@ -72,6 +72,15 @@ android {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
     }
+    // Rename APK
+    applicationVariants.all {
+        val variant = this
+        outputs.all {
+            val output = this as? com.android.build.gradle.internal.api.BaseVariantOutputImpl
+            // Example result: AIPrompter_1.0_release.apk
+            output?.outputFileName = "Verifai_${variant.versionName}_${variant.buildType.name}.apk"
+        }
+    }
 }
 
 dependencies {

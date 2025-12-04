@@ -34,7 +34,7 @@ class AuthRepository @Inject constructor(
     suspend fun register(request : RegisterRequest) : RegisterResponse {
         val response = authAPI.register(request)
 
-        if(response.code() != HttpURLConnection.HTTP_OK){
+        if(response.code() != HttpURLConnection.HTTP_CREATED){
             throw HttpException(response)
         }
         return response.body() ?: throw NullPointerException("Response data is empty")
