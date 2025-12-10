@@ -46,7 +46,8 @@ fun LoginScreenContent(
 ) {
     ElevatedCard(
         colors = CardDefaults.elevatedCardColors().copy(
-            containerColor = Color.White
+            containerColor = MaterialTheme.colorScheme.surface,
+            contentColor = MaterialTheme.colorScheme.onSurface
         ),
         shape = MaterialTheme.shapes.large,
         modifier = modifier
@@ -138,8 +139,9 @@ fun LoginScreenContent(
                 )
                 Text(
                     text = stringResource(R.string.lbl_register_here),
-                    color = MaterialTheme.colorScheme.primary,
                     fontSize = 14.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = MaterialTheme.colorScheme.primary,
                     modifier = Modifier
                         .padding(start = 8.dp)
                         .clickableDelayed {

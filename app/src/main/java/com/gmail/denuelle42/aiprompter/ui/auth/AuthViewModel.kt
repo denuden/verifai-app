@@ -1,13 +1,13 @@
 package com.gmail.denuelle42.aiprompter.ui.auth
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.gmail.denuelle42.aiprompter.data.remote.error.ErrorModel
 import com.gmail.denuelle42.aiprompter.data.repositories.auth.request.LoginRequest
 import com.gmail.denuelle42.aiprompter.data.repositories.auth.request.RegisterRequest
-import com.gmail.denuelle42.aiprompter.di.modules.TokenProvider
 import com.gmail.denuelle42.aiprompter.domain.repositories.auth.AuthUseCase
+import com.gmail.denuelle42.aiprompter.navigation.AuthScreens
+import com.gmail.denuelle42.aiprompter.navigation.FactCheckScreens
 import com.gmail.denuelle42.aiprompter.utils.OneTimeEvents
 import com.gmail.denuelle42.aiprompter.utils.ResultState
 import com.gmail.denuelle42.aiprompter.utils.asResult
@@ -67,6 +67,9 @@ class AuthViewModel @Inject constructor(
                             is ResultState.Success -> {
                                 _stateFlow.update { it.copy(userModel = res.data.data) }
                                 sendEvent(OneTimeEvents.ShowToast("Hello ${res.data.data?.name}"))
+
+                                //navigate to home
+                                sendEvent(OneTimeEvents.OnNavigate(FactCheckScreens.PromptNavigation))
                             }
                         }
                     }.collect()
@@ -90,6 +93,24 @@ class AuthViewModel @Inject constructor(
                             is ResultState.Success -> {
                                 _stateFlow.update { it.copy(userModel = res.data.data) }
                                 sendEvent(OneTimeEvents.ShowToast("Hello ${res.data.data?.name}"))
+
+                                //navigate to home
+                                sendEvent(OneTimeEvents.OnNavigate(FactCheckScreens.PromptNavigation))
+                            }
+                        }
+                    }.collect()
+                }
+            }
+
+            is AuthScreenEvents.OnRefreshToken -> {
+                viewModelScope.launch {
+                    authUseCase.refreshToken().asResult().onEach { res ->
+                        when (res) {
+                            ResultState.Completed -> _stateFlow.update { it.copy(isRefreshTokenLoading = false) }
+                            is ResultState.Error -> onError(res.exception)
+                            ResultState.Loading -> _stateFlow.update { it.copy(isRefreshTokenLoading = true) }
+                            is ResultState.Success -> {
+                                sendEvent(OneTimeEvents.OnNavigate(AuthScreens.SplashNavigation))
                             }
                         }
                     }.collect()
@@ -101,10 +122,19 @@ class AuthViewModel @Inject constructor(
     private fun onError(e: Throwable?) {
         when (e) {
             is HttpException -> {
+                val statusCode = e.code()
                 val errorBody = e.response()?.errorBody()
                 val gson = Gson()
                 val type = object : TypeToken<ErrorModel>() {}.type
                 val errorResponse: ErrorModel? = gson.fromJson(errorBody?.charStream(), type)
+
+                // Example: Handle specific status
+                when(statusCode) {
+                    401 -> {
+                        sendEvent(OneTimeEvents.OnNavigate(AuthScreens.LoginNavigation))
+                        return
+                    }
+                }
 
                 //if this is not null, then there is a message regarding bad request of params
                 if (errorResponse?.errors != null) {

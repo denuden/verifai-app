@@ -1,21 +1,16 @@
-package com.gmail.denuelle42.aiprompter.ui.sample
+package com.gmail.denuelle42.aiprompter.ui.fact_check
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.gmail.denuelle42.aiprompter.data.remote.error.ErrorModel
-import com.gmail.denuelle42.aiprompter.data.repositories.sample.request.GetRequest
-import com.gmail.denuelle42.aiprompter.domain.repositories.sample.SampleUseCase
+import com.gmail.denuelle42.aiprompter.ui.sample.SampleViewModel
 import com.gmail.denuelle42.aiprompter.utils.OneTimeEvents
-import com.gmail.denuelle42.aiprompter.utils.ResultState
-import com.gmail.denuelle42.aiprompter.utils.asResult
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -23,33 +18,21 @@ import retrofit2.HttpException
 import javax.inject.Inject
 
 @HiltViewModel
-class SampleViewModel @Inject constructor(
-    private val sampleUseCase: SampleUseCase
-): ViewModel(){
+class FactCheckViewModel @Inject constructor(
+
+) : ViewModel() {
     private val TAG = SampleViewModel::class.java.simpleName
 
     private val _channel = Channel<OneTimeEvents>()
     val channel = _channel.receiveAsFlow()
 
-    private val _stateFlow = MutableStateFlow<SampleScreenState>(SampleScreenState())
+    private val _stateFlow = MutableStateFlow<FactCheckScreenState>(FactCheckScreenState())
     val stateFlow = _stateFlow.asStateFlow()
 
-    fun onEvent(event : SampleScreenEvents) {
+    fun onEvent(event : FactCheckScreenEvents) {
         when(event){
-            is SampleScreenEvents.OnGetEvent -> {
-                viewModelScope.launch {
-                    sampleUseCase.getRequest(GetRequest()).asResult().onEach { res ->
-                        when(res) {
-                            ResultState.Completed -> _stateFlow.update { it.copy(isLoading = false) }
-                            is ResultState.Error -> onError(res.exception)
-                            ResultState.Loading -> _stateFlow.update { it.copy(isLoading = true) }
-                            is ResultState.Success ->  _stateFlow.update {
-                                it.copy(name = event.name)
-                            }
-                        }
-                    }
-
-                }
+            is FactCheckScreenEvents.OnChangeTextPrompt -> {
+                _stateFlow.update { it.copy(textPrompt = event.value) }
             }
         }
     }
@@ -66,7 +49,6 @@ class SampleViewModel @Inject constructor(
                 if (errorResponse?.errors != null) {
                     _stateFlow.update {
                         it.copy(
-                            nameError = errorResponse.errors.name?.get(0),
                         )
                     }
                     sendEvent(OneTimeEvents.ShowInputError(errorResponse.errors))
@@ -76,7 +58,6 @@ class SampleViewModel @Inject constructor(
             }
         }
     }
-
     private fun sendEvent(event: OneTimeEvents) {
         viewModelScope.launch {
             _channel.send(event)

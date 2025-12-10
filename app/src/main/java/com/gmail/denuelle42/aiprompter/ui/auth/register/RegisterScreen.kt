@@ -189,6 +189,7 @@ fun RegisterScreenContent(
                 Text(
                     text = stringResource(R.string.lbl_sign_in),
                     color = MaterialTheme.colorScheme.primary,
+                    fontWeight = FontWeight.Bold,
                     fontSize = 14.sp,
                     modifier = Modifier
                         .padding(start = 8.dp)

@@ -1,17 +1,18 @@
 package com.gmail.denuelle42.aiprompter.navigation
 
-import android.window.SplashScreen
 import com.gmail.denuelle42.aiprompter.data.remote.models.SampleModel
 import kotlinx.serialization.Serializable
 
 /**
  * For splashscreen and simple navigation
  */
-enum class AppRootScreens{
-    Splash,
-    Main
-}
+sealed interface AppRootScreens {
+    @Serializable
+    data object Splash : AppRootScreens
 
+    @Serializable
+    data class Main(val isLoggedIn: Boolean) : AppRootScreens
+}
 /**
  * Main Destinations for nested graph, like a web link  E.G. auth/login, auth/register. main/home. main/profile
  * article/home, article/view
@@ -21,6 +22,8 @@ sealed class RootGraphs {
     data object SampleGraph : RootGraphs()
     @Serializable
     data object AuthGraph : RootGraphs()
+    @Serializable
+    data object FactCheckGraph : RootGraphs()
 }
 
 /**
@@ -37,9 +40,18 @@ sealed class SampleScreens : NavigationScreens {
 
 sealed class AuthScreens : NavigationScreens {
     @Serializable
-    data object AuthMain : AuthScreens()
+    data object AuthMainNavigation : AuthScreens()
     @Serializable
-    data object Login : AuthScreens()
+    data object LoginNavigation : AuthScreens()
     @Serializable
-    data object Register : AuthScreens()
+    data object RegisterNavigation : AuthScreens()
+
+    //Not part, just a holder to indicate that i am in splashscreen
+    @Serializable
+    data object SplashNavigation : AuthScreens()
+}
+
+sealed class FactCheckScreens : NavigationScreens {
+    @Serializable
+    data object PromptNavigation : FactCheckScreens()
 }

@@ -4,6 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.toRoute
 import com.gmail.denuelle42.aiprompter.navigation.AppRootScreens
 
 @Composable
@@ -12,20 +13,22 @@ fun AppRoot() {
 
     NavHost(
         navController = navController,
-        startDestination = AppRootScreens.Splash.toString()
+        startDestination = AppRootScreens.Splash
     ) {
-        composable(AppRootScreens.Splash.toString()) {
+        composable<AppRootScreens.Splash> {
             SplashScreen(
-                onFinished = {
-                    navController.navigate(AppRootScreens.Main.toString()) {
-                        popUpTo(AppRootScreens.Splash.toString()) { inclusive = true }
+                onFinished = { isLoggedIn ->
+                    navController.navigate(AppRootScreens.Main(isLoggedIn = isLoggedIn)) {
+                        popUpTo<AppRootScreens.Splash> { inclusive = true }
                     }
                 }
             )
         }
 
-        composable(AppRootScreens.Main.toString()) {
-            MainScreen()
+        composable<AppRootScreens.Main>  { backStackEntry ->
+            // Extract the argument using .toRoute()
+            val args = backStackEntry.toRoute<AppRootScreens.Main>()
+            MainScreen(isLoggedIn = args.isLoggedIn)
         }
     }
 }

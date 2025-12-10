@@ -11,5 +11,6 @@ sealed class AuthScreenEvents {
     data class OnLogin(val email : String, val password: String) : AuthScreenEvents()
     data class OnRegister(val name : String, val email : String, val password: String, val password_confirmation: String) : AuthScreenEvents()
 
+    data object OnRefreshToken : AuthScreenEvents()
     //Navigation
 }

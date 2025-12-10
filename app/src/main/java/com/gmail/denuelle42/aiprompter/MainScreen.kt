@@ -35,7 +35,10 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.compose.VerifaiTheme
 import com.gmail.denuelle42.aiprompter.navigation.AppNavigation
+import com.gmail.denuelle42.aiprompter.navigation.AuthScreens
+import com.gmail.denuelle42.aiprompter.navigation.FactCheckScreens
 import com.gmail.denuelle42.aiprompter.navigation.NavigationScreens
+import com.gmail.denuelle42.aiprompter.navigation.RootGraphs
 import com.gmail.denuelle42.aiprompter.navigation.getTopBarTitle
 import com.gmail.denuelle42.aiprompter.utils.ObserveAsEvents
 import com.gmail.denuelle42.aiprompter.utils.SnackBarController
@@ -43,7 +46,7 @@ import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MainScreen(modifier: Modifier = Modifier) {
+fun MainScreen(isLoggedIn: Boolean) {
     val navController = rememberNavController()
 
     val context = LocalContext.current
@@ -52,7 +55,7 @@ fun MainScreen(modifier: Modifier = Modifier) {
     // Checks current type to determine which component should be shown or not from the scaffold
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
-    val screenType =  "MainScreens"
+    val screenType = "MainScreens"
 
     // holds state if topborcontent should be shown
     var topBarState by rememberSaveable { (mutableStateOf(false)) }
@@ -90,8 +93,13 @@ fun MainScreen(modifier: Modifier = Modifier) {
     }
 
     Scaffold {
-        Box(modifier = Modifier.fillMaxSize().padding(it)){
-            AppNavigation(navController)
+        Box(modifier = Modifier
+            .fillMaxSize()
+            .padding(it)) {
+            AppNavigation(
+                navController,
+                startDestination = if (isLoggedIn) RootGraphs.FactCheckGraph else RootGraphs.AuthGraph
+            )
         }
     }
 }
@@ -157,7 +165,7 @@ fun TopAppBarContent(
 @Preview
 @Composable
 private fun MainScreenPreview() {
-    VerifaiTheme  {
+    VerifaiTheme {
         Surface(
             color = MaterialTheme.colorScheme.surface,
         ) {

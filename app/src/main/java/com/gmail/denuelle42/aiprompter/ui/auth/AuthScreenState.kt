@@ -1,7 +1,6 @@
 package com.gmail.denuelle42.aiprompter.ui.auth
 
 import com.gmail.denuelle42.aiprompter.data.remote.models.UserModel
-import com.gmail.denuelle42.aiprompter.data.repositories.auth.response.LoginResponse
 
 data class AuthScreenState(
     val email : String? = null,
@@ -15,6 +14,7 @@ data class AuthScreenState(
 
     val isLoginLoading : Boolean = false,
     val isRegisterLoading : Boolean = false,
+    val isRefreshTokenLoading : Boolean = false,
 
     val  userModel: UserModel? = null,
 )

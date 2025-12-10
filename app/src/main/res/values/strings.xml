@@ -16,4 +16,13 @@
     <string name="lbl_register">Register</string>
     <string name="lbl_already_have_an_account">Already have an account?</string>
     <string name="lbl_name">Name</string>
+
+<!--=================FACT CHECK ==========================-->
+<!--    Hint-->
+    <string name="hint_ai_is_here_to_help_you">AI is here to help you.</string>
+
+<!--    Label-->
+    <string name="lbl_tagline">Turn your confusion into\n clear, verified facts.</string>
+    <string name="lbl_tagline_subtitle">Get instant verdicts with verified sources you can check yourself.</string>
+    <string name="lbl_speech_to_text">Speech to text</string>
 </resources>

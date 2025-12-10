@@ -42,6 +42,7 @@ import com.gmail.denuelle42.aiprompter.R
 import com.gmail.denuelle42.aiprompter.navigation.NavigationScreens
 import com.gmail.denuelle42.aiprompter.ui.auth.login.LoginScreenContent
 import com.gmail.denuelle42.aiprompter.ui.auth.register.RegisterScreenContent
+import com.gmail.denuelle42.aiprompter.ui.common.AppTitle
 import com.gmail.denuelle42.aiprompter.ui.common.dialog.ErrorDialog
 import com.gmail.denuelle42.aiprompter.ui.common.dialog.LoadingDialog
 import com.gmail.denuelle42.aiprompter.utils.ObserveAsEvents
@@ -175,16 +176,7 @@ fun AuthScreenContent(
         ) {
 
             // LOGO
-            Text(
-                text = stringResource(R.string.app_name).uppercase(),
-                style = MaterialTheme.typography.displayLarge,
-                fontWeight = FontWeight.Bold,
-                fontSize = 30.sp,
-                color = MaterialTheme.colorScheme.onPrimaryContainer,
-                modifier = Modifier
-                    .align(Alignment.CenterHorizontally)
-                    .padding(bottom = 8.dp)
-            )
+            AppTitle(modifier = Modifier.align(Alignment.CenterHorizontally))
 
             // FADING CARD
             Box(

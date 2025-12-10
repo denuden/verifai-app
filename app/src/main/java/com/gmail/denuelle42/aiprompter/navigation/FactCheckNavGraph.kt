@@ -4,14 +4,14 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
-import com.gmail.denuelle42.aiprompter.ui.auth.AuthScreen
+import com.gmail.denuelle42.aiprompter.ui.fact_check.screen.PromptScreen
 
-fun NavGraphBuilder.addAuthNavGraph(
+fun NavGraphBuilder.addFactCheckNavGraph(
     navController: NavController
 ) {
-    navigation<RootGraphs.AuthGraph>(startDestination = AuthScreens.AuthMainNavigation) {
-        composable<AuthScreens.AuthMainNavigation> {
-            AuthScreen(
+    navigation<RootGraphs.FactCheckGraph>(startDestination = FactCheckScreens.PromptNavigation) {
+        composable<FactCheckScreens.PromptNavigation> {
+            PromptScreen(
                 onNavigate = { navController.navigate(it) },
                 onPopBackStack = { navController.popBackStack() }
             )
