@@ -1,8 +1,14 @@
 package com.gmail.denuelle42.aiprompter
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.CircularWavyProgressIndicator
+import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -12,6 +18,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -25,6 +32,7 @@ import com.gmail.denuelle42.aiprompter.utils.OneTimeEvents
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
+@OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 fun SplashScreen(
     onFinished: (isLoggedIn : Boolean) -> Unit,
@@ -56,18 +64,25 @@ fun SplashScreen(
         }
     }
 
-  
-    Box(modifier = Modifier.fillMaxSize()) {
-        Text(
-            text = "AI PROMPTER",
-            style = MaterialTheme.typography.displaySmall,
-            modifier = Modifier.align(
-                Alignment.Center
+    Surface(
+        modifier = Modifier
+            .background(color = MaterialTheme.colorScheme.surface)
+            .fillMaxSize()
+    ) {
+        Column(
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally,
+            modifier = Modifier.fillMaxSize()) {
+            Text(
+                text = "AI PROMPTER",
+                style = MaterialTheme.typography.displaySmall,
             )
-        )
+            CircularWavyProgressIndicator()
+        }
     }
 }
 
+@OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Preview
 @Composable
 private fun SplashScreenPreview() {
@@ -77,7 +92,16 @@ private fun SplashScreenPreview() {
                 .background(color = MaterialTheme.colorScheme.surface)
                 .fillMaxSize()
         ) {
-//            SplashScreen() {}
+            Column(
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally,
+                modifier = Modifier.fillMaxSize()) {
+                Text(
+                    text = "AI PROMPTER",
+                    style = MaterialTheme.typography.displaySmall,
+                )
+                CircularWavyProgressIndicator(modifier = Modifier.padding(top = 8.dp))
+            }
         }
     }
 }

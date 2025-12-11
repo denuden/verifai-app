@@ -9,7 +9,7 @@ import java.io.IOException
  * Credits to: Link -> https://www.valueof.io/blog/stateflow-sharedflow-flow-viewmodel-lifecycle
  * This wraps results in Success, Error, and automatic Loading, Completed states, onStart()
  */
-private const val RETRY_TIME_IN_MILLIS = 15_000L
+private const val RETRY_TIME_IN_MILLIS = 2_000L
 private const val RETRY_ATTEMPT_COUNT = 3
 
 sealed interface ResultState<out T> {
