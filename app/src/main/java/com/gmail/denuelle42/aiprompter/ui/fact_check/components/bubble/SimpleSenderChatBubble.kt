@@ -1,4 +1,4 @@
-package com.gmail.denuelle42.aiprompter.ui.fact_check.components
+package com.gmail.denuelle42.aiprompter.ui.fact_check.components.bubble
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth

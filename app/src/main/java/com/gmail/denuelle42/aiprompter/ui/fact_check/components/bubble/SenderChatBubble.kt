@@ -1,4 +1,4 @@
-package com.gmail.denuelle42.aiprompter.ui.fact_check.components
+package com.gmail.denuelle42.aiprompter.ui.fact_check.components.bubble
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -14,6 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.compose.VerifaiTheme
+import com.gmail.denuelle42.aiprompter.ui.fact_check.components.CustomSenderBubbleShape
 
 @Composable
 fun SenderChatBubble(

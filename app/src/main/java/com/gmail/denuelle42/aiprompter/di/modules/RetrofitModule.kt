@@ -10,6 +10,7 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
+import javax.inject.Named
 import javax.inject.Singleton
 
 //https://medium.com/@psarakisnick/clean-networking-with-retrofit-and-interceptor-in-kotlin-63a9ac85def2
@@ -31,9 +32,11 @@ object RetrofitModule {
 
     /**
      * Provides custom httpclient for adding interceptors
+     * @Named API since this is used for secure API calls
      */
     @Provides
     @Singleton
+    @Named("api")
     fun provideOkHttpClient(
         loggingInterceptor: HttpLoggingInterceptor,
         tokenProvider: TokenProvider
@@ -73,6 +76,19 @@ object RetrofitModule {
             .connectTimeout(45, TimeUnit.SECONDS)
             .readTimeout(45, TimeUnit.SECONDS)
             .writeTimeout(45, TimeUnit.SECONDS)
+            .followRedirects(false) // prevents authorization token leakage
+            .followSslRedirects(false) //Prevents Protocol Downgrade Attacks (SSL Stripping)
+            .build()
+    }
+
+
+    @Provides
+    @Singleton
+    @Named("preview")
+    fun providePreviewOkHttpClient(): OkHttpClient {
+        return OkHttpClient.Builder()
+            .followRedirects(true)
+            .followSslRedirects(true)
             .build()
     }
 
@@ -85,7 +101,9 @@ object RetrofitModule {
      */
     @Provides
     @Singleton
-    fun provideRetrofit(client: OkHttpClient): Retrofit {
+    fun provideRetrofit(
+        @Named("api") client: OkHttpClient
+    ): Retrofit {
         return Retrofit.Builder().baseUrl(BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())
             .client(client).build()

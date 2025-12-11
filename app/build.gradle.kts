@@ -162,4 +162,7 @@ dependencies {
 
 //    Palette
     implementation(libs.palette)
+
+//    JSOUP
+    implementation(libs.jsoup)
 }
