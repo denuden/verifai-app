@@ -60,9 +60,14 @@ class LinkPreviewFetcher @Inject constructor(
             }
         }
     }
-    private fun resolveRedirect(url: String): String {
-        val request = Request.Builder().url(url).build()
-        val response = client.newCall(request).execute()
-        return response.request.url.toString()
-    }
+
+    private suspend fun resolveRedirect(url: String): String? =
+        withContext(Dispatchers.IO) {
+            try {
+                val request = Request.Builder().url(url).build()
+                client.newCall(request).execute().use { it.request.url.toString() }
+            } catch (e: Exception) {
+                null
+            }
+        }
 }

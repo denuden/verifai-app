@@ -1,6 +1,7 @@
 package com.gmail.denuelle42.aiprompter.navigation
 
 import com.gmail.denuelle42.aiprompter.data.remote.models.SampleModel
+import com.gmail.denuelle42.aiprompter.data.remote.models.fact_check.FactCheckModel
 import kotlinx.serialization.Serializable
 
 /**
@@ -54,4 +55,6 @@ sealed class AuthScreens : NavigationScreens {
 sealed class FactCheckScreens : NavigationScreens {
     @Serializable
     data object PromptNavigation : FactCheckScreens()
+    @Serializable
+    data class ChatNavigation(val statement: String) : FactCheckScreens()
 }

@@ -1,4 +1,5 @@
 package com.example.compose
+import android.app.Activity
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
@@ -8,8 +9,11 @@ import androidx.compose.material3.dynamicDarkColorScheme
 import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
+import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalView
+import androidx.core.view.WindowCompat
 import com.gmail.denuelle42.aiprompter.ui.theme.AppTypography
 
 private val lightScheme = lightColorScheme(
@@ -268,6 +272,23 @@ fun VerifaiTheme(
       darkTheme -> lightScheme
       else -> lightScheme
   }
+
+    // 2. ADD THIS BLOCK to handle the Status Bar Icons
+    val view = LocalView.current
+    if (!view.isInEditMode) {
+        SideEffect {
+            val window = (view.context as Activity).window
+
+            // This controller lets us change the icon colors
+            val insetsController = WindowCompat.getInsetsController(window, view)
+
+            // TRUE = Dark Icons (for light background)
+            // FALSE = Light Icons (for dark background)
+
+            // Since light mode is enforced
+            insetsController.isAppearanceLightStatusBars = true
+        }
+    }
 
   MaterialTheme(
     colorScheme = colorScheme,

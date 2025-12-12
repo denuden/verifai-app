@@ -23,7 +23,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.max
 import com.example.compose.VerifaiTheme
 import com.gmail.denuelle42.aiprompter.R
 
@@ -31,6 +30,7 @@ import com.gmail.denuelle42.aiprompter.R
 fun TextFieldPrompt(
     textValue : String,
     onTextChange : (String) -> Unit,
+    onEnter : () -> Unit,
     modifier: Modifier = Modifier) {
     Surface(
         color = MaterialTheme.colorScheme.background,
@@ -62,7 +62,9 @@ fun TextFieldPrompt(
                 modifier = Modifier.fillMaxWidth()
             ) {
                 IconButton(
-                    onClick = {}
+                    onClick = {
+                        //TODO
+                    }
                 ) {
                     Icon(
                         imageVector = Icons.Outlined.Mic,
@@ -73,7 +75,9 @@ fun TextFieldPrompt(
                 Spacer(modifier = Modifier.weight(1f))
 
                 FilledIconButton(
-                    onClick = {},
+                    onClick = {
+                        onEnter()
+                    },
                     shape = MaterialTheme.shapes.medium
                 ) {
                     Icon(
@@ -92,7 +96,8 @@ private fun TextFieldPromptPreview() {
     VerifaiTheme {
         TextFieldPrompt(
             textValue = "",
-            onTextChange = {}
+            onTextChange = {},
+            onEnter = {},
         )
     }
 }

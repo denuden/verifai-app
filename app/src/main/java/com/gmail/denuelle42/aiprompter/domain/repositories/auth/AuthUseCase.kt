@@ -47,6 +47,10 @@ class AuthUseCase @Inject constructor(
     fun register(request: RegisterRequest) : Flow<RegisterResponse> {
         return flow {
             val response = authRepository.register(request)
+            val token = response.token.orEmpty().ifEmpty { "n/a" }
+            dataStore.updateData {
+                UserPreferences(token = token)
+            }
             emit(response)
         }.flowOn(ioDispatcher)
     }

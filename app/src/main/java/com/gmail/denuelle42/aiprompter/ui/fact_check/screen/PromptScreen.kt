@@ -1,5 +1,6 @@
 package com.gmail.denuelle42.aiprompter.ui.fact_check.screen
 
+import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -43,6 +44,10 @@ import com.gmail.denuelle42.aiprompter.ui.fact_check.FactCheckScreenEvents
 import com.gmail.denuelle42.aiprompter.ui.fact_check.FactCheckScreenState
 import com.gmail.denuelle42.aiprompter.ui.fact_check.FactCheckViewModel
 import com.gmail.denuelle42.aiprompter.ui.fact_check.components.TextFieldPrompt
+import com.gmail.denuelle42.aiprompter.utils.ObserveAsEvents
+import com.gmail.denuelle42.aiprompter.utils.OneTimeEvents
+import com.gmail.denuelle42.aiprompter.utils.SnackBarController
+import kotlinx.coroutines.launch
 
 @Composable
 fun PromptScreen(
@@ -57,6 +62,18 @@ fun PromptScreen(
         uiState = state,
         onEvent = viewModel::onEvent
     )
+
+    ObserveAsEvents(viewModel.channel) { event ->
+        when(event){
+            is OneTimeEvents.OnNavigate -> {
+                onNavigate(event.route)
+            }
+            is OneTimeEvents.OnPopBackStack -> {
+                onPopBackStack()
+            }
+            else -> Unit
+        }
+    }
 }
 
 @Composable
@@ -76,7 +93,9 @@ fun PromptScreenContent(
                 .fillMaxSize()
         ) {
             Button(
-                onClick = {},
+                onClick = {
+                    //TODO
+                },
                 shape = MaterialTheme.shapes.medium,
                 colors = ButtonDefaults.buttonColors().copy(
                     containerColor = Color.DarkGray
@@ -119,7 +138,10 @@ fun PromptScreenContent(
                     onTextChange = {
                         onEvent(FactCheckScreenEvents.OnChangeTextPrompt(it))
                     },
-                    textValue = uiState.textPrompt.orEmpty()
+                    textValue = uiState.textPrompt.orEmpty(),
+                    onEnter = {
+                        onEvent(FactCheckScreenEvents.OnNavigateToChatScreen(uiState.textPrompt.orEmpty()))
+                    }
                 )
             }
 
@@ -130,15 +152,17 @@ fun PromptScreenContent(
                 modifier = Modifier.padding(16.dp)
             ) {
                 FilledIconButton(
-                    onClick = {},
+                    onClick = {
+                        //TODO
+                    },
                     shape = MaterialTheme.shapes.medium,
                 ) {
                     Icon(
                         imageVector = Icons.AutoMirrored.Default.ListAlt,
-                        contentDescription = "History"
+                        contentDescription = stringResource(R.string.lbl_history)
                     )
                 }
-                Text(text = "History", style = MaterialTheme.typography.bodyMedium)
+                Text(text = stringResource(R.string.lbl_history), style = MaterialTheme.typography.bodyMedium)
             }
 
         }

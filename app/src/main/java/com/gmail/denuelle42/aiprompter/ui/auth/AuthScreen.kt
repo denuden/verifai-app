@@ -60,10 +60,10 @@ fun AuthScreen(
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
 
-    val state by viewModel.stateFlow.collectAsStateWithLifecycle()
-
     var showErrorDialog by remember { mutableStateOf(false) }
     var errorMessage by remember { mutableStateOf("") }
+
+    val state by viewModel.stateFlow.collectAsStateWithLifecycle()
 
     ErrorDialog(
         text = errorMessage,

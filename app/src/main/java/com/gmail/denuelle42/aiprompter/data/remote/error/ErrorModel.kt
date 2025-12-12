@@ -32,4 +32,5 @@ data class ErrorData(
     var name : List<String>? = null,
     var password : List<String>? = null,
     var password_confirmation : List<String>? = null,
+    var statement : List<String>? = null,
 )

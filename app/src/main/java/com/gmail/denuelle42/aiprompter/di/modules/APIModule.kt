@@ -1,6 +1,7 @@
 package com.gmail.denuelle42.aiprompter.di.modules
 
 import com.gmail.denuelle42.aiprompter.data.repositories.auth.AuthAPI
+import com.gmail.denuelle42.aiprompter.data.repositories.fact_check.FactCheckAPI
 import com.gmail.denuelle42.aiprompter.data.repositories.sample.SampleAPI
 import dagger.Module
 import dagger.Provides
@@ -22,5 +23,11 @@ object APIModule {
     @Singleton
     fun provideAuthAPI(retrofit: Retrofit): AuthAPI {
         return retrofit.create(AuthAPI::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun provideFactCheckAPI(retrofit: Retrofit): FactCheckAPI {
+        return retrofit.create(FactCheckAPI::class.java)
     }
 }
