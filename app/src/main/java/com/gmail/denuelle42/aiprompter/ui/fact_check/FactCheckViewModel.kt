@@ -1,14 +1,17 @@
 package com.gmail.denuelle42.aiprompter.ui.fact_check
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.gmail.denuelle42.aiprompter.data.remote.error.ErrorModel
+import com.gmail.denuelle42.aiprompter.data.remote.models.fact_check.FactCheckModel
 import com.gmail.denuelle42.aiprompter.domain.repositories.fact_check.FactCheckUseCase
 import com.gmail.denuelle42.aiprompter.navigation.FactCheckScreens
 import com.gmail.denuelle42.aiprompter.ui.sample.SampleViewModel
 import com.gmail.denuelle42.aiprompter.utils.OneTimeEvents
-import com.gmail.denuelle42.aiprompter.utils.ResultState
-import com.gmail.denuelle42.aiprompter.utils.asResult
+import com.gmail.denuelle42.aiprompter.utils.network.ResultState
+import com.gmail.denuelle42.aiprompter.utils.network.asResult
+import com.gmail.denuelle42.aiprompter.utils.pagination.DefaultPaginator
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -35,6 +38,37 @@ class FactCheckViewModel @Inject constructor(
     private val _stateFlow = MutableStateFlow<FactCheckScreenState>(FactCheckScreenState())
     val stateFlow = _stateFlow.asStateFlow()
 
+    private val getAllFactChecksPaginator = DefaultPaginator<Int, FactCheckModel>(
+        initialKey = _stateFlow.value.page,
+        onLoadUpdated = { isLoading ->
+            _stateFlow.update { it.copy(isGetAllFactCheckLoading = isLoading) }
+        },
+        onRequest = { nextPage ->
+            factCheckUseCase.getAllFactChecks(page = nextPage)
+        },
+        getNextKey = {
+            _stateFlow.value.page + 1
+        },
+        onError = { error ->
+            _stateFlow.update { it.copy(getAllFactCheckError = error?.localizedMessage) }
+            sendEvent(OneTimeEvents.ShowError(error?.localizedMessage ?: "Unknown error"))
+        },
+        onSuccess = { items, newKey ->
+            _stateFlow.update {
+                it.copy(
+                    getAllFactCheckResponse = it.getAllFactCheckResponse + items,
+                    page = newKey,
+                    endReached = items.isEmpty()
+                )
+            }
+        }
+    )
+
+    private fun loadNextItems() {
+        viewModelScope.launch {
+            getAllFactChecksPaginator.loadNextItems()
+        }
+    }
 
     fun onEvent(event : FactCheckScreenEvents) {
         when(event){
@@ -57,12 +91,24 @@ class FactCheckViewModel @Inject constructor(
                     }.collect()
                 }
             }
+
+            is FactCheckScreenEvents.OnGetAllFactChecks -> {
+                loadNextItems()
+            }
+
+            is FactCheckScreenEvents.OnShowFactCheck -> {
+
+            }
+
             is FactCheckScreenEvents.OnNavigateToChatScreen -> {
                 sendEvent(OneTimeEvents.OnNavigate(FactCheckScreens.ChatNavigation(event.value)))
             }
 
             FactCheckScreenEvents.OnNavigateToPromptScreen -> {
 
+            }
+            FactCheckScreenEvents.OnNavigateToHistoryScreen -> {
+                sendEvent(OneTimeEvents.OnNavigate(FactCheckScreens.HistoryNavigation))
             }
         }
     }

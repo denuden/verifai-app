@@ -1,4 +1,4 @@
-package com.gmail.denuelle42.aiprompter.utils
+package com.gmail.denuelle42.aiprompter.utils.network
 
 import android.content.Context
 import android.net.ConnectivityManager

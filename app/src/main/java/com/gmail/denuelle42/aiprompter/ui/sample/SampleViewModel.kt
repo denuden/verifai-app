@@ -1,14 +1,13 @@
 package com.gmail.denuelle42.aiprompter.ui.sample
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.gmail.denuelle42.aiprompter.data.remote.error.ErrorModel
 import com.gmail.denuelle42.aiprompter.data.repositories.sample.request.GetRequest
 import com.gmail.denuelle42.aiprompter.domain.repositories.sample.SampleUseCase
 import com.gmail.denuelle42.aiprompter.utils.OneTimeEvents
-import com.gmail.denuelle42.aiprompter.utils.ResultState
-import com.gmail.denuelle42.aiprompter.utils.asResult
+import com.gmail.denuelle42.aiprompter.utils.network.ResultState
+import com.gmail.denuelle42.aiprompter.utils.network.asResult
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import dagger.hilt.android.lifecycle.HiltViewModel

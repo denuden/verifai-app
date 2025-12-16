@@ -1,10 +1,12 @@
 package com.gmail.denuelle42.aiprompter.data.repositories.fact_check
 
+import com.gmail.denuelle42.aiprompter.data.remote.models.PaginationModel
 import com.gmail.denuelle42.aiprompter.data.repositories.auth.request.LoginRequest
 import com.gmail.denuelle42.aiprompter.data.repositories.auth.response.LoginResponse
 import com.gmail.denuelle42.aiprompter.data.repositories.fact_check.request.CreateFactCheckRequest
 import com.gmail.denuelle42.aiprompter.data.repositories.fact_check.response.CreateFactCheckResponse
 import com.gmail.denuelle42.aiprompter.data.repositories.fact_check.response.GetAllFactChecksResponse
+import com.gmail.denuelle42.aiprompter.data.repositories.fact_check.response.ShowFactCheckResponse
 import dagger.hilt.android.scopes.ViewModelScoped
 import retrofit2.HttpException
 import java.net.HttpURLConnection
@@ -24,8 +26,18 @@ class FactCheckRepository @Inject constructor(
     }
 
 
-    suspend fun getAllFactChecks() : GetAllFactChecksResponse {
-        val response = factCheckAPI.getAllFactChecks()
+    suspend fun getAllFactChecks(page : Int) : GetAllFactChecksResponse {
+        val response = factCheckAPI.getAllFactChecks(page)
+
+        if(response.code() != HttpURLConnection.HTTP_OK){
+            throw HttpException(response)
+        }
+
+        return response.body() ?: throw NullPointerException("Response data is empty")
+    }
+
+    suspend fun showFactCheck(id : Int) : ShowFactCheckResponse {
+        val response = factCheckAPI.showFactCheck(id)
 
         if(response.code() != HttpURLConnection.HTTP_OK){
             throw HttpException(response)

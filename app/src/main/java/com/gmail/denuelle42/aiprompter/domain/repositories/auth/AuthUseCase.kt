@@ -58,7 +58,7 @@ class AuthUseCase @Inject constructor(
     fun refreshToken() : Flow<LoginResponse> {
         return flow {
             val response = authRepository.refreshToken()
-            val token = response.token.orEmpty().ifEmpty { "n/a" }
+            val token = response.token.orEmpty().ifBlank { "n/a" }
             dataStore.updateData {
                 UserPreferences(token = token)
             }

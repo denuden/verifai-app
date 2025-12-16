@@ -57,4 +57,6 @@ sealed class FactCheckScreens : NavigationScreens {
     data object PromptNavigation : FactCheckScreens()
     @Serializable
     data class ChatNavigation(val statement: String) : FactCheckScreens()
+    @Serializable
+    data object HistoryNavigation : FactCheckScreens()
 }

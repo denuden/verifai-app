@@ -1,9 +1,13 @@
 package com.gmail.denuelle42.aiprompter.domain.repositories.fact_check
 
+import android.util.Log
+import com.gmail.denuelle42.aiprompter.data.remote.models.PaginationModel
+import com.gmail.denuelle42.aiprompter.data.remote.models.fact_check.FactCheckModel
 import com.gmail.denuelle42.aiprompter.data.repositories.fact_check.FactCheckRepository
 import com.gmail.denuelle42.aiprompter.data.repositories.fact_check.request.CreateFactCheckRequest
 import com.gmail.denuelle42.aiprompter.data.repositories.fact_check.response.CreateFactCheckResponse
 import com.gmail.denuelle42.aiprompter.data.repositories.fact_check.response.GetAllFactChecksResponse
+import com.gmail.denuelle42.aiprompter.data.repositories.fact_check.response.ShowFactCheckResponse
 import com.gmail.denuelle42.aiprompter.di.modules.IoDispatcher
 import com.gmail.denuelle42.aiprompter.utils.LinkPreviewFetcher
 import com.gmail.denuelle42.aiprompter.utils.extractUrl
@@ -57,11 +61,31 @@ class FactCheckUseCase @Inject constructor(
         }.flowOn(ioDispatcher)
     }
 
-    fun getAllFactChecks() : Flow<GetAllFactChecksResponse> {
+    /**
+     * @param pageSize default is always 10 in API and cannot be changed
+     * Paginated
+     */
+    suspend fun getAllFactChecks(page: Int, pageSize : Int = 10): Result<List<FactCheckModel>> {
+        return try {
+            val response = factCheckRepository.getAllFactChecks(page)
+            val startingIndex = page * pageSize
+            val total = response.total ?: 0
+
+            if (response.data != null) {
+                Result.success(response.data)
+            } else {
+                Result.success(emptyList())
+            }
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
+
+    fun showFactCheck(id : Int) : Flow<ShowFactCheckResponse> {
         return flow {
-            val response = factCheckRepository.getAllFactChecks()
+            val response = factCheckRepository.showFactCheck(id)
             emit(response)
         }.flowOn(ioDispatcher)
     }
-
 }

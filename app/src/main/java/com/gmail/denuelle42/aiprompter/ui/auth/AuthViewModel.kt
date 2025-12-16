@@ -9,8 +9,8 @@ import com.gmail.denuelle42.aiprompter.domain.repositories.auth.AuthUseCase
 import com.gmail.denuelle42.aiprompter.navigation.AuthScreens
 import com.gmail.denuelle42.aiprompter.navigation.FactCheckScreens
 import com.gmail.denuelle42.aiprompter.utils.OneTimeEvents
-import com.gmail.denuelle42.aiprompter.utils.ResultState
-import com.gmail.denuelle42.aiprompter.utils.asResult
+import com.gmail.denuelle42.aiprompter.utils.network.ResultState
+import com.gmail.denuelle42.aiprompter.utils.network.asResult
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -131,7 +131,7 @@ class AuthViewModel @Inject constructor(
                 // Example: Handle specific status
                 when(statusCode) {
                     401 -> {
-                        sendEvent(OneTimeEvents.OnNavigate(AuthScreens.LoginNavigation))
+                        sendEvent(OneTimeEvents.OnNavigate(AuthScreens.AuthMainNavigation))
                         return
                     }
                 }

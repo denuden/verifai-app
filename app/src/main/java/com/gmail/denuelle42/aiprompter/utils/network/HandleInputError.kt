@@ -1,4 +1,4 @@
-package com.gmail.denuelle42.aiprompter.utils
+package com.gmail.denuelle42.aiprompter.utils.network
 
 import com.gmail.denuelle42.aiprompter.data.remote.error.ErrorData
 

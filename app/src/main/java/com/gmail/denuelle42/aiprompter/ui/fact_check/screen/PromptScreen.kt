@@ -1,25 +1,18 @@
 package com.gmail.denuelle42.aiprompter.ui.fact_check.screen
 
-import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.List
 import androidx.compose.material.icons.automirrored.filled.ListAlt
-import androidx.compose.material.icons.automirrored.filled.ViewList
-import androidx.compose.material.icons.rounded.Person
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilledIconButton
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -46,8 +39,6 @@ import com.gmail.denuelle42.aiprompter.ui.fact_check.FactCheckViewModel
 import com.gmail.denuelle42.aiprompter.ui.fact_check.components.TextFieldPrompt
 import com.gmail.denuelle42.aiprompter.utils.ObserveAsEvents
 import com.gmail.denuelle42.aiprompter.utils.OneTimeEvents
-import com.gmail.denuelle42.aiprompter.utils.SnackBarController
-import kotlinx.coroutines.launch
 
 @Composable
 fun PromptScreen(
@@ -153,7 +144,7 @@ fun PromptScreenContent(
             ) {
                 FilledIconButton(
                     onClick = {
-                        //TODO
+                        onEvent(FactCheckScreenEvents.OnNavigateToHistoryScreen)
                     },
                     shape = MaterialTheme.shapes.medium,
                 ) {

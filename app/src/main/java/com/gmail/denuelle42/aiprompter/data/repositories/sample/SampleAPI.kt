@@ -10,6 +10,7 @@ import retrofit2.http.Multipart
 import retrofit2.http.POST
 import retrofit2.http.Part
 import retrofit2.http.Path
+import retrofit2.http.Query
 import retrofit2.http.QueryMap
 
 interface SampleAPI {
@@ -22,6 +23,9 @@ interface SampleAPI {
 
     @GET("{id}")
     suspend fun getUrlParamsRequest(@Path("id") id : Int) : Response<GetResponse>
+
+    @GET("/")
+    suspend fun getSingleQueryParamsRequest(@Query("id") id : Int) : Response<GetResponse>
 
     @GET("")
     suspend fun getQueryParamsRequest(@QueryMap params : Map<String, String>): Response<GetResponse>

@@ -6,6 +6,7 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
 import androidx.navigation.toRoute
+import com.gmail.denuelle42.aiprompter.ui.fact_check.screen.HistoryScreen
 import com.gmail.denuelle42.aiprompter.ui.fact_check.screen.PromptScreen
 
 fun NavGraphBuilder.addFactCheckNavGraph(
@@ -27,6 +28,13 @@ fun NavGraphBuilder.addFactCheckNavGraph(
                 onNavigate = { route -> navController.navigate(route) },
                 onPopBackStack = { navController.popBackStack() },
                 statement = statement
+            )
+        }
+
+        composable<FactCheckScreens.HistoryNavigation> {
+            HistoryScreen(
+                onNavigate = { route -> navController.navigate(route) },
+                onPopBackStack = { navController.popBackStack() },
             )
         }
     }

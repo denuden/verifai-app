@@ -52,11 +52,12 @@ fun ChatResponseFlow(
                 showVerdict = true
             }
             ReceiverChatBubble {
-                data.sources.orEmpty().forEach { source ->
-                    if (source != null) {
-                        Spacer(Modifier.height(8.dp))
-                        Column {  }
-                        LinkPreviewCard(source)
+                Column {
+                    data.sources.orEmpty().forEach { source ->
+                        if (source != null) {
+                            Spacer(Modifier.height(8.dp))
+                            LinkPreviewCard(source)
+                        }
                     }
                 }
             }
