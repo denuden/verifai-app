@@ -26,9 +26,11 @@
     <string name="lbl_tagline_subtitle">Get instant verdicts with verified sources you can check yourself.</string>
     <string name="lbl_speech_to_text">Speech to text</string>
     <string name="lbl_thinking">Thinking...</string>
+    <string name="lbl_history">History</string>
+    <string name="lbl_verdict_successful_msg">Your statement has been fact-checked successfully!</string>
+    <string name="lbl_loading_your_history">Loading your history...</string>
 
 <!--    Button-->
     <string name="btn_ask_again">Ask again</string>
-    <string name="lbl_history">History</string>
-    <string name="lbl_verdict_successful_msg">Your statement has been fact-checked successfully!</string>
+
 </resources>

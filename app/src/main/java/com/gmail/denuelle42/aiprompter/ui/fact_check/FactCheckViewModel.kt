@@ -107,6 +107,9 @@ class FactCheckViewModel @Inject constructor(
             FactCheckScreenEvents.OnNavigateToPromptScreen -> {
 
             }
+            FactCheckScreenEvents.OnNavigateBack -> {
+                sendEvent(OneTimeEvents.OnPopBackStack)
+            }
             FactCheckScreenEvents.OnNavigateToHistoryScreen -> {
                 sendEvent(OneTimeEvents.OnNavigate(FactCheckScreens.HistoryNavigation))
             }

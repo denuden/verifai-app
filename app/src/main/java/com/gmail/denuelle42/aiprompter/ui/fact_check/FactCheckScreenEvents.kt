@@ -11,5 +11,6 @@ sealed class FactCheckScreenEvents {
 
     data class OnNavigateToChatScreen(val value: String) : FactCheckScreenEvents()
     object OnNavigateToPromptScreen : FactCheckScreenEvents()
+    object OnNavigateBack : FactCheckScreenEvents()
     object OnNavigateToHistoryScreen : FactCheckScreenEvents()
 }
